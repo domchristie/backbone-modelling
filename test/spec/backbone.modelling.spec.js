@@ -37,7 +37,7 @@ describe("Backbone.Modelling", function() {
         expect(function() {
           var Post = Backbone.Modelling.extend({}, { store: "not a function" });
           new Post();
-        }).toThrow("Backbone.Modelling: store property needs to be a function that returns a Backbone Collection.");
+        }).toThrow("Backbone.Modelling: store property should be a function that returns a Backbone Collection.");
       }
     );
     
@@ -46,7 +46,7 @@ describe("Backbone.Modelling", function() {
         expect(function() {
           var Post = Backbone.Modelling.extend({}, { store: function(){} });
           new Post();
-        }).toThrow("Backbone.Modelling: store property needs to be a function that returns a Backbone Collection.");
+        }).toThrow("Backbone.Modelling: store property should be a function that returns a Backbone Collection.");
       }
     );
   });
