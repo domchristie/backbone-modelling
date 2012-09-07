@@ -14,7 +14,30 @@
   
   Modelling = Backbone.Modelling = function(options) {
     Model.apply(this, [options]);
-    this.addToStore();
+    
+    var collectionErr = {
+      name: 'Error',
+      message: 'Backbone.Modelling: store property should be a ' +
+        'function that returns a Backbone Collection.'
+    };
+    
+    if(this.constructor.store) {
+      if(typeof this.constructor.store !== 'function') {
+        throw collectionErr;
+      }
+      else if(!(this.constructor.store() instanceof Backbone.Collection)) {
+        throw collectionErr;
+      }
+      else {
+        this.addToStore();
+      }
+    }
+    else {
+      throw {
+        name: 'Error',
+        message: 'Backbone.Modelling: constructor has no store() property.'
+      };
+    }
   };
   
   ctor.prototype = Model.prototype;
@@ -22,32 +45,32 @@
   
   _.extend(Modelling.prototype, Model.prototype, {
     addToStore: function() {
-      
-      var collectionErr = {
-        name: 'Error',
-        message: 'Backbone.Modelling: store property should be a ' +
-          'function that returns a Backbone Collection.'
-      };
-      
-      if(this.constructor.store) {
-        if(typeof this.constructor.store !== 'function') {
-          throw collectionErr;
-        }
-        else if(!(this.constructor.store() instanceof Backbone.Collection)) {
-          throw collectionErr;
-        }
-        else {
-          this.constructor.store().add(this);
-        }
-      }
-      else {
-        throw {
-          name: 'Error',
-          message: 'Backbone.Modelling: constructor has no store() property.'
-        }
-      }
+      this.constructor.store().add(this);
     }
   });
   
   Modelling.extend = Model.extend;
 })();
+
+
+Post = Backbone.Modelling.extend({
+  initialize: function() {
+    return 'Hello world';
+  }
+}, {
+  store: function() {
+    return this._store = this._store ||
+      new PostsCollection();
+  }
+});
+
+PostsCollection = Backbone.Collection.extend({
+  model: Post,
+  
+  initialize: function() {
+    console.log(this.model == Post);
+  }
+});
+
+post = new Post();
+// postsCollection = new PostsCollection();
