@@ -15,7 +15,7 @@ Instantiate the store collection as a class property. The store function should 
     }, {
       store: function() {
         return this._store = this._store ||
-          new Backbone.Collection(null, { model: this });
+          new Backbone.Collection();
       }
     });
     
