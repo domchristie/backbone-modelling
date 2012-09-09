@@ -51,26 +51,3 @@
   
   Modelling.extend = Model.extend;
 })();
-
-
-Post = Backbone.Modelling.extend({
-  initialize: function() {
-    return 'Hello world';
-  }
-}, {
-  store: function() {
-    return this._store = this._store ||
-      new PostsCollection();
-  }
-});
-
-PostsCollection = Backbone.Collection.extend({
-  model: Post,
-  
-  initialize: function() {
-    console.log(this.model == Post);
-  }
-});
-
-post = new Post();
-// postsCollection = new PostsCollection();
